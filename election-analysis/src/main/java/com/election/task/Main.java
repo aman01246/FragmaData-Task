@@ -12,7 +12,6 @@ public class Main {
 	public static void main(String[] args) {
 
 		
-		
 		 ResultDataReader reader = new ResultDataReader();
 
 	        List<ElectionResult> winners =
@@ -33,7 +32,7 @@ public class Main {
 //	        service.task3(winners, candidates);
 
 	        System.out.println("\n--------------- TASK 4 ----------------");
-//	        service.task4(winners, candidates);
+//	        service.task4(winners);
 		
 	}
 

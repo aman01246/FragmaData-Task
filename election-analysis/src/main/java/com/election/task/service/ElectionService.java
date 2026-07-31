@@ -9,6 +9,7 @@ import com.election.task.model.ElectionResult;
 
 public class ElectionService {
 
+	// All Data form Candidates
 	public void task1(List<ElectionResult> winners, List<CandidateResult> candidates) {
 
 		// totalVotes
@@ -17,7 +18,7 @@ public class ElectionService {
 				.collect(Collectors.groupingBy(e -> e.getParty(), 
 						 Collectors.summingLong(ElectionResult::getVotes)));
 
-		partyVotes.forEach((k,v)->System.out.printf("%-45s %-15s \n",k,v));
+//		partyVotes.forEach((k,v)->System.out.printf("%-45s %-15s \n",k,v));
 
 		// seats
 		Map<String, Long> seatsWon = winners.stream()
@@ -25,14 +26,14 @@ public class ElectionService {
 				.collect(Collectors.groupingBy(e -> e.getParty(),
 						 Collectors.counting()));
 
-		seatsWon.forEach((k,v)->System.out.printf("%-45s %-15s \n",k,v));
+//		seatsWon.forEach((k,v)->System.out.printf("%-45s %-15s \n",k,v));
 		
 		long totalVotes = partyVotes.values().stream()
 				.mapToLong(Long::longValue)
 				.sum();
 
 		// Print Result
-		System.out.printf("%-45s %-15s %-10s %-10s%n", "Party", "Total Votes", "Seats Won", "Vote %");
+		System.out.printf("\u001B[1m%-45s %-15s %-10s %-10s%n", "Party", "Total Votes", "Seats Won", "Vote %");
 //		System.out.println("Party \t  Total Votes \t Seats Won \t Vote %");
 		System.out.println("------------------------------------------------------------------------");
 
@@ -75,14 +76,14 @@ public class ElectionService {
 	public void task3(List<ElectionResult> winners, List<CandidateResult> candidates) {
 
 		Map<String, List<CandidateResult>> constituencyMap = candidates.stream()
-				.collect(Collectors.groupingBy(CandidateResult::getConstituency));
+				.collect(Collectors.groupingBy(e->e.getConstituency()+"-"+e.getState()));
 
 		System.out.printf("%-30s %-30s %-35s %-15s %-15s %-15s%n", "Constituency", "Winner", "Party", "Winner Votes",
 				"Total Votes", "Candidates");
 		System.out.println("----------------------------------------------------------------------------------------");
 		for (ElectionResult winner : winners) {
 
-			List<CandidateResult> list = constituencyMap.get(winner.getConstituency());
+			List<CandidateResult> list = constituencyMap.get(winner.getConstituency()+"-"+ winner.getState());
 
 			long totalVotes = list.stream().mapToLong(CandidateResult::getTotalVotes).sum();
 
@@ -94,7 +95,7 @@ public class ElectionService {
 
 	}
 
-	public void task4(List<ElectionResult> winners, List<CandidateResult> candidates) {
+	public void task4(List<ElectionResult> winners) {
 
 
 		System.out.printf("%-30s %-30s %-15s%n", "Constituency", "Winning Candidate", "Vote Share");

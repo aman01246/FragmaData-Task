@@ -12,7 +12,7 @@ public class CandidateResult {
 	private long totalVotes;
 
 	public CandidateResult() {
-		super();
+		super(); 
 	}
 
 	public CandidateResult(String state, String constituency, int serialNo, String candidate, String party,
