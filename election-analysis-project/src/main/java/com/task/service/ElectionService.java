@@ -1,7 +1,10 @@
 package com.task.service;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -54,7 +57,7 @@ public class ElectionService implements ElectionServiceImpl{
 	 // ================= Task 1 =================
 
     @Override
-    public Map<String, PartySummary> getPartySummary() {
+    public Map<String, PartySummary> task1() {
 
         Map<String, Long> partyVotes = winners.stream()
                 .filter(e -> !e.getParty().equalsIgnoreCase("Independent"))
@@ -75,7 +78,8 @@ public class ElectionService implements ElectionServiceImpl{
                 .stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
-                        e -> new PartySummary(
+                        e -> new PartySummary( 
+                        			e.getKey(),
                                 e.getValue(),
                                 seatsWon.getOrDefault(e.getKey(), 0L),
                                 (e.getValue() * 100.0) / totalVotes
@@ -86,7 +90,7 @@ public class ElectionService implements ElectionServiceImpl{
     // ================= Task 2 =================
 
     @Override
-    public List<StateSummary> getStateSummary() {
+    public List<StateSummary> task2() {
 
         return candidates.stream()
                 .collect(Collectors.groupingBy(CandidateResult::getState))
@@ -110,7 +114,7 @@ public class ElectionService implements ElectionServiceImpl{
     // ================= Task 3 =================
 
     @Override
-    public List<ConstituencySummary> getConstituencySummary() {
+    public List<ConstituencySummary> task3() {
 
         Map<String, List<CandidateResult>> constituencyMap = candidates.stream()
                 .collect(Collectors.groupingBy(c ->
@@ -143,13 +147,97 @@ public class ElectionService implements ElectionServiceImpl{
     // ================= Task 4 =================
 
     @Override
-    public List<ElectionResult> getAbsoluteMajorityWinners() {
+    public List<ElectionResult> task4() {
 
         return winners.stream()
                 .filter(w -> w.getPercentage() > 50)
                 .toList();
 
     }
+
+    //======================================
+    
+    
+    // extra 1
+	@Override
+	public List<CandidateResult> top5Candidates() {
+		
+		return candidates.stream()
+		.sorted((e1,e2)->Long.compare(e2.getTotalVotes(), e1.getTotalVotes()))
+		.limit(5).toList();
+		
+	}
+
+	 // extra 2
+	@Override
+	public Map<String, Long> top5Party() {
+		
+		
+		return candidates.stream()
+		.collect(Collectors.groupingBy(e->e.getParty(), 
+				Collectors.summingLong(e->e.getTotalVotes())))
+		.entrySet().stream()
+		.sorted((e1,e2)->Long.compare(e2.getValue(), e1.getValue()))
+		.limit(5)
+		.collect(Collectors.toMap(Map.Entry::getKey,
+				Map.Entry::getValue,
+				 (e1,e2)-> e1, 
+				 LinkedHashMap::new ));
+		
+	}
+
+
+	 // extra 3
+	@Override
+	public Map<String, Long> constituencyWithMaxCandidates() {
+		
+		 Map.Entry<String, Long> value = candidates.stream()
+		            .collect(Collectors.groupingBy(
+		                    CandidateResult::getConstituency,
+		                    Collectors.counting()))
+		            .entrySet()
+		            .stream()
+		            .max(Map.Entry.comparingByValue())
+		            .orElse(null);
+
+		    if (value == null) {
+		        return Collections.emptyMap();
+		    }
+
+		    return Map.of(value.getKey(), value.getValue());
+	}
+
+
+	// extra 4
+	@Override
+	public Map<String, Long> maxStateVotes() {
+		
+		Entry<String, Long> value = candidates.stream()
+		.collect(Collectors.groupingBy(e->e.getState(), Collectors.summingLong(e->e.getTotalVotes())))
+		.entrySet().stream()
+		.sorted((e1,e2)->Long.compare(e2.getValue(), e1.getValue()))
+		.max(Map.Entry.comparingByValue())
+		.orElse(null);
+		
+		if(value == null) {
+			return Collections.emptyMap();
+		}
+		
+		return Map.of(value.getKey(), value.getValue());
+	}
+
+
+	// extra 5
+	@Override
+	public String findCandidates(String constituency) {
+		
+		for(CandidateResult candidate: candidates) {
+			if(candidate.getConstituency().equalsIgnoreCase(constituency)) {
+				return candidate.getCandidate();
+			}
+		}
+		return "Candidate not found";
+	}
 
 
 	
