@@ -1,0 +1,340 @@
+OAuth Implementation
+-------------------------
+
+Step 1: User opens your application
+Browser
+    │
+    ▼
+http://localhost:8080/
+
+Your HomeController executes:
+@GetMapping("/")
+public String home() {
+    return "home";
+}
+Spring returns:
+home.html
+
+The browser displays:
+------------------------
+Google OAuth Demo
+
+[ Login with Google ]
+------------------------
+========================================
+Step 2: User clicks Login with Google
+Your HTML contains:
+
+<a href="/oauth2/authorization/google">
+    Login with Google
+</a>
+
+You never created it this controller.
+Spring Security creates it automatically.
+============================================
+
+Step 3: Spring Security intercepts the request
+The request is
+
+GET /oauth2/authorization/google
+
+Instead of searching for your controller,
+Spring Security's OAuth2 filter catches it.
+
+Browser
+     │
+     ▼
+GET /oauth2/authorization/google
+     │
+     ▼
+Spring Security
+
+Since you configured:
+
+spring.security.oauth2.client.registration.google.client-id=...
+spring.security.oauth2.client.registration.google.client-secret=...
+
+Spring knows:
+ .Provider = Google
+ .Client ID
+ .Client Secret
+ .Scope
+So it builds Google's authorization URL automatically.
+==========================================================
+
+Step 4: Spring redirects to Google
+Spring sends a 302 Redirect.
+
+Something like:
+https://accounts.google.com/o/oauth2/v2/auth
+
+So the browser goes here:
+Your App
+      │
+      ▼
+Spring Security
+      │
+302 Redirect
+      ▼
+Google Login Page
+
+You never wrote this redirect code.
+Spring Security does it.
+=====================================================
+
+Step 5: User logs into Google
+
+Google asks
+
+Choose Account
+↓
+Enter Password
+↓
+Allow this application?
+↓
+User clicks
+Allow
+========================================================
+
+Step 6: Google redirects back
+
+Remember this URI?
+
+http://localhost:8080/login/oauth2/code/google
+Google sends the browser here.
+
+Example:
+GET
+http://localhost:8080/login/oauth2/code/google?code=abcxyz
+Notice
+code=abcxyz
+This is called the Authorization Code.
+
+=====================================================
+
+Step 7: Spring Security catches it again
+Again...
+
+There is NO controller for
+
+/login/oauth2/code/google
+
+Spring Security intercepts it.
+Browser
+      │
+      ▼
+GET /login/oauth2/code/google
+      │
+      ▼
+Spring Security
+==========================================
+
+Step 8: Spring exchanges the code
+
+Spring sends a request behind the scenes to Google.
+
+POST
+https://oauth2.googleapis.com/token
+
+It sends
+Authorization Code
+Client ID
+Client Secret
+
+Google verifies everything.
+
+===================================
+Step 9: Google returns Access Token
+
+Google returns something like
+
+{
+   "access_token":"xxxxx",
+   "id_token":"yyyy",
+   "expires_in":3600
+}
+
+========================================
+
+Step 10: Spring requests user information
+
+Now Spring calls Google's UserInfo API.
+
+GET
+https://openidconnect.googleapis.com/v1/userinfo
+
+with the Access Token.
+
+Google responds:
+{
+  "sub":"123456789",
+  "name":"Aman Kumar",
+  "email":"aman@gmail.com",
+  "picture":"https://.....jpg"
+}
+
+====================================================
+
+Step 11: Spring creates an OAuth2User
+
+Spring converts the JSON into an OAuth2User object.
+
+That's why later you can write:
+
+@AuthenticationPrincipal OAuth2User oAuth2User
+
+Then:
+
+String name = oAuth2User.getAttribute("name");
+
+String email = oAuth2User.getAttribute("email");
+
+String picture = oAuth2User.getAttribute("picture");
+
+You don't have to call Google yourself.
+
+Spring already did it.
+===========================================
+Step 12: Spring redirects to /profile
+
+Because of your configuration:
+
+.oauth2Login(oauth -> oauth
+        .defaultSuccessUrl("/profile", true)
+)
+Spring redirects to:
+GET /profile
+
+Now your own controller executes.
+@GetMapping("/profile")
+public String profile(
+        @AuthenticationPrincipal OAuth2User user) {
+}
+Now you finally get the Google user details.
+=========================================================
+
+Complete Flow
+
+Browser
+   │
+   ▼
+Home Page (/)
+   │
+   ▼
+Click "Login with Google"
+   │
+   ▼
+/oauth2/authorization/google
+   │
+   ▼
+Spring Security (handles automatically)
+   │
+   ▼
+Redirect to Google
+   │
+   ▼
+Google Login
+   │
+   ▼
+User grants permission
+   │
+   ▼
+/login/oauth2/code/google?code=...
+   │
+   ▼
+Spring Security (handles automatically)
+   │
+   ▼
+Exchange code for access token
+   │
+   ▼
+Fetch user information from Google
+   │
+   ▼
+Create OAuth2User
+   │
+   ▼
+Redirect to /profile
+   │
+   ▼
+Your ProfileController
+
+====================================================================
+
+Log Out
+-----------------
+
+The page:
+
+Are you sure you want to log out?
+
+Log Out
+
+is not your page. It is generated automatically by Spring Security.
+
+Why does it appear?
+When you click:
+<a href="/logout">Logout</a>
+
+your browser sends a GET request to /logout.
+In modern Spring Security, logout is performed using a POST request, 
+not GET. So Spring shows a built-in confirmation page that contains 
+a form with a CSRF token. When you click the Log Out button on that
+page, it submits a POST request to /logout.
+
+Flow:
+
+Click Logout
+      │
+      ▼
+GET /logout
+      │
+      ▼
+Spring Security Logout Confirmation Page
+      │
+      ▼
+Click "Log Out"
+      │
+      ▼
+POST /logout
+      │
+      ▼
+Session Invalidated
+      │
+      ▼
+Redirect to "/"
+
+-------------------
+How to logout directly without the confirmation page
+
+Instead of using an <a> tag, use a POST form.
+
+<form th:action="@{/logout}" method="post">
+    <input type="hidden"
+           th:name="${_csrf.parameterName}"
+           th:value="${_csrf.token}" />
+    <button type="submit">Logout</button>
+</form>
+
+Now the flow becomes:
+
+Click Logout
+      │
+      ▼
+POST /logout
+      │
+      ▼
+Spring Security logs out the user
+      │
+      ▼
+Redirect to "/"
+
+No intermediate confirmation page.
+Why does Spring do this?
+
+It's for security.
+
+If logout happened via a simple GET request, another website could
+ trick your browser into visiting /logout and 
+log you out without your consent. Requiring a POST request with a 
+valid CSRF token prevents that.

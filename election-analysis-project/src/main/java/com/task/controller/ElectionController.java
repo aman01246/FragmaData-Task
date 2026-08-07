@@ -13,9 +13,11 @@ import com.task.dto.ApiResponse;
 import com.task.dto.ConstituencySummary;
 import com.task.dto.PartySummary;
 import com.task.dto.StateSummary;
+import com.task.dto.StateWiseData;
 import com.task.model.CandidateResult;
 import com.task.model.ElectionResult;
 import com.task.service.ElectionService;
+import com.task.service.StateDataServiceImpl;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 public class ElectionController {
 
     private final ElectionService service;
+    private final StateDataServiceImpl service2;
 
     // All Winning Candidates Result
     @Operation(
@@ -212,18 +215,36 @@ public class ElectionController {
             description = "Returns candidates by constituency name."
     )
     @GetMapping("/candidateByConstituency")
-    public ResponseEntity<ApiResponse<String>> findCandidate(@RequestParam String constituency){
+    public ResponseEntity<ApiResponse<List<String>>> findCandidate(@RequestParam String state, @RequestParam String constituency){
     		
     		return ResponseEntity.ok(
-    				ApiResponse.<String>builder()
+    				ApiResponse.<List<String>>builder()
     				.success(true)
-    				.message(" constituency with maximum candidates")
-    				.data(service.findCandidates(constituency))
+    				.message("Candidates Name")
+    				.data(service.findCandidates(state, constituency))
     				.build()
     				);
     	
     }
     
+    
+    // Own End Points
+    @Operation(
+            summary = "Search All Data by State name.",
+            description = "Returns All Data by State name."
+    )
+    @GetMapping("/stateData")
+    public ResponseEntity<ApiResponse<StateWiseData>> findStateData(@RequestParam String state){
+    		
+    		return ResponseEntity.ok(
+    				ApiResponse.<StateWiseData>builder()
+    				.success(true)
+    				.message("Candidates Name")
+    				.data(service2.stateData(state))
+    				.build()
+    				);
+    	
+    }
     
     
 

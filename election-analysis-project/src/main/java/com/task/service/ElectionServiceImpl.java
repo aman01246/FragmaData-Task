@@ -34,7 +34,7 @@ public interface ElectionServiceImpl {
     
     Map<String, Long> maxStateVotes();
     
-    String findCandidates(String constituency);
+    List<String> findCandidates(String state, String constituency);
     
     
     

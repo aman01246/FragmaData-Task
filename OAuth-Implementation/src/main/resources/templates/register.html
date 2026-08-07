@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>User Registration</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, sans-serif;
+    background:#f5f5f5;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
+
+.container{
+    width:420px;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,.2);
+}
+
+h2{
+    text-align:center;
+    margin-bottom:20px;
+    color:#333;
+}
+
+img{
+    display:block;
+    margin:0 auto 20px;
+    width:100px;
+    height:100px;
+    border-radius:50%;
+    object-fit:cover;
+    border:3px solid #4285F4;
+}
+
+label{
+    display:block;
+    margin-bottom:5px;
+    font-weight:bold;
+    color:#444;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:5px;
+    font-size:15px;
+}
+
+input:read-only{
+    background:#f0f0f0;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:5px;
+    background:#4285F4;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#2d6cdf;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h2>User Registration</h2>
+
+<form th:action="@{/register}" method="post">
+
+    <!-- CSRF Token -->
+    <input type="hidden"
+           th:name="${_csrf.parameterName}"
+           th:value="${_csrf.token}" />
+
+    <img th:src="${picture}" alt="Profile">
+
+    <label>Name</label>
+    <input type="text" name="name" th:value="${name}" readonly>
+
+    <label>Email</label>
+    <input type="email" name="email" th:value="${email}" readonly>
+
+    <label>Phone</label>
+    <input type="text" name="phone" placeholder="Enter phone number">
+
+    <label>Department</label>
+    <input type="text" name="department" placeholder="Enter department">
+
+    <label>Designation</label>
+    <input type="text" name="designation" placeholder="Enter designation">
+
+    <button type="submit">Register</button>
+
+</form>
+
+</div>
+
+</body>
+</html>

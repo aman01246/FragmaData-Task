@@ -1,5 +1,6 @@
 package com.task.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,7 +16,6 @@ import com.task.dto.StateSummary;
 import com.task.exception.ResourceNotFoundException;
 import com.task.model.CandidateResult;
 import com.task.model.ElectionResult;
-import com.task.util.DataReader;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -24,25 +24,28 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor				
 public class ElectionService implements ElectionServiceImpl{
 
-	  	private final DataReader dataReader;
+	  	
+	  	private final ElectionDataService dataService;
+	  	private List<ElectionResult> winner;
+	  	private List<CandidateResult> candidates;
 
-	    private List<ElectionResult> winners;
-	    private List<CandidateResult> candidates;
-	
-	    @PostConstruct
-	    public void loadData() {
-	    	winners = dataReader.readElectionResult("2019_Results_Winning_Candidate.csv");
-	    	candidates = dataReader.readCandidateResult("2019_Results.csv");
-	    }
-	    
+	  	
+	  	@PostConstruct
+	  	public void initialize() {
+	  		winner = dataService.getWinners();
+	  		candidates = dataService.getCandidates();
+	  	}
 	
 	@Override
 	public List<ElectionResult> getAllElectionResults() {
-		 if (winners.isEmpty()) {
+		
+		
+		
+		 if (winner.isEmpty()) {
 		        throw new ResourceNotFoundException("Election results not found.");
 		  }
 
-		return winners;
+		return winner;
 	}
 
 	@Override
@@ -59,12 +62,12 @@ public class ElectionService implements ElectionServiceImpl{
     @Override
     public Map<String, PartySummary> task1() {
 
-        Map<String, Long> partyVotes = winners.stream()
+        Map<String, Long> partyVotes = winner.stream()
                 .filter(e -> !e.getParty().equalsIgnoreCase("Independent"))
                 .collect(Collectors.groupingBy(ElectionResult::getParty,
                         Collectors.summingLong(ElectionResult::getVotes)));
 
-        Map<String, Long> seatsWon = winners.stream()
+        Map<String, Long> seatsWon = winner.stream()
                 .filter(e -> !e.getParty().equalsIgnoreCase("Independent"))
                 .collect(Collectors.groupingBy(ElectionResult::getParty,
                         Collectors.counting()));
@@ -120,7 +123,7 @@ public class ElectionService implements ElectionServiceImpl{
                 .collect(Collectors.groupingBy(c ->
                         c.getConstituency() + "-" + c.getState()));
 
-        return winners.stream()
+        return winner.stream()
                 .map(winner -> {
 
                     List<CandidateResult> list =
@@ -149,7 +152,7 @@ public class ElectionService implements ElectionServiceImpl{
     @Override
     public List<ElectionResult> task4() {
 
-        return winners.stream()
+        return winner.stream()
                 .filter(w -> w.getPercentage() > 50)
                 .toList();
 
@@ -229,14 +232,19 @@ public class ElectionService implements ElectionServiceImpl{
 
 	// extra 5
 	@Override
-	public String findCandidates(String constituency) {
+	public List<String> findCandidates(String state, String constituency) {
 		
+		List<String> list = new ArrayList<>();
 		for(CandidateResult candidate: candidates) {
-			if(candidate.getConstituency().equalsIgnoreCase(constituency)) {
-				return candidate.getCandidate();
+			if(candidate.getState().equalsIgnoreCase(state) && candidate.getConstituency().equalsIgnoreCase(constituency) ) {
+				list.add(candidate.getCandidate());
 			}
 		}
-		return "Candidate not found";
+		if(list.isEmpty()){
+		 list.add("Candidates not found");
+		}
+		
+		return list;
 	}
 
 
