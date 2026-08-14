@@ -16,12 +16,39 @@ public class SecurityConfig {
 					 .requestMatchers("/").permitAll()
 					.anyRequest().authenticated())
 			
+//			.exceptionHandling(exception -> exception
+//			        .authenticationEntryPoint((request, response, authException) -> {
+//			            response.sendError(403, "Access Denied");
+//			        })
+//			    )
+			
 			.oauth2Login(oauth -> oauth
-			        .defaultSuccessUrl("/profile", true))
+			        .defaultSuccessUrl("/profile", true)
+//			        .failureHandler((request, response, exception) -> {
+//
+//			            System.out.println("\n==============================");
+//			            System.out.println("OAUTH LOGIN FAILED");
+//			            System.out.println("Exception class: "
+//			                    + exception.getClass().getName());
+//			            System.out.println("Message: "
+//			                    + exception.getMessage());
+//			            System.out.println("Cause: "
+//			                    + exception.getCause());
+//			            System.out.println("==============================\n");
+//
+//			            exception.printStackTrace();
+//
+//			            response.sendRedirect("/login?error");
+//			        })
+					)
 			
 			.logout(logout -> logout
-					.logoutSuccessUrl("/")
-					.permitAll());
+					 .logoutUrl("/logout")
+					    .logoutSuccessUrl("/")
+					    .invalidateHttpSession(true)
+					    .clearAuthentication(true)
+					    .deleteCookies("JSESSIONID")
+					    .permitAll());
 		
 		return http.build();
 		

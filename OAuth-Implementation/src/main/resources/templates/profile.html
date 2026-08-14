@@ -1,87 +1,94 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="UTF-8">
-<title>Profile</title>
+	<meta charset="UTF-8">
+	<title>Profile</title>
 
-<style>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background: #f5f5f5;
+		}
 
-body{
-    font-family: Arial, sans-serif;
-    background:#f5f5f5;
-}
+		.container {
+			width: 400px;
+			margin: 40px auto;
+			background: white;
+			padding: 25px;
+			border-radius: 10px;
+			text-align: center;
+			box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+		}
 
-.container{
-    width:400px;
-    margin:40px auto;
-    background:white;
-    padding:25px;
-    border-radius:10px;
-    text-align:center;
-    box-shadow:0 0 10px rgba(0,0,0,.2);
-}
+		img {
+			width: 120px;
+			height: 120px;
+			border-radius: 50%;
+			border: 3px solid #4285F4;
+			object-fit: cover;
+			margin-bottom: 20px;
+		}
 
-img{
-    width:120px;
-    height:120px;
-    border-radius:50%;
-    border:3px solid #4285F4;
-    object-fit:cover;
-    margin-bottom:20px;
-}
+		p {
+			text-align: left;
+			font-size: 16px;
+		}
 
-p{
-    text-align:left;
-    font-size:16px;
-}
+		button {
+			background: #4285F4;
+			color: white;
+			border: none;
+			padding: 10px 20px;
+			border-radius: 5px;
+			cursor: pointer;
+		}
 
-button{
-    background:#4285F4;
-    color:white;
-    border:none;
-    padding:10px 20px;
-    border-radius:5px;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#2d6cdf;
-}
-
-</style>
+		button:hover {
+			background: #2d6cdf;
+		}
+	</style>
 
 </head>
+
 <body>
 
-<div class="container">
+	<div class="container">
 
-<h2>User Profile</h2>
+		<h2>User Profile</h2>
 
-<img th:src="${user.profilePicture}" alt="Profile">
+		<img th:src="${user.profilePicture}" alt="Profile">
 
-<p><b>Name :</b> <span th:text="${user.name}"></span></p>
+		<p><b>Name :</b> <span th:text="${user.name}"></span></p>
 
-<p><b>Email :</b> <span th:text="${user.email}"></span></p>
+		<p><b>Email :</b> <span th:text="${user.email}"></span></p>
 
-<p><b>Google Id :</b> <span th:text="${user.googleId}"></span></p>
+		<p><b>Providers :</b></p>
 
-<p><b>Phone :</b> <span th:text="${user.phone}"></span></p>
+		<ul>
+		    <li th:each="provider : ${user.providers}">
+		        <span th:text="${provider.provider}"></span>
+		        -
+		        <span th:text="${provider.providerId}"></span>
+		    </li>
+		</ul>
+		
+		<p><b>Phone :</b> <span th:text="${user.phone}"></span></p>
 
-<p><b>Department :</b> <span th:text="${user.department}"></span></p>
+		<p><b>Department :</b> <span th:text="${user.department}"></span></p>
 
-<p><b>Designation :</b> <span th:text="${user.designation}"></span></p>
+		<p><b>Designation :</b> <span th:text="${user.designation}"></span></p>
 
-<form th:action="@{/logout}" method="post">
+		<form th:action="@{/logout}" method="post">
 
-    <input type="hidden"
-           th:name="${_csrf.parameterName}"
-           th:value="${_csrf.token}" />
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-    <button type="submit">Logout</button>
+			<button type="submit">Logout</button>
 
-</form>
+		</form>
 
-</div>
+	</div>
 
 </body>
+
 </html>

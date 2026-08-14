@@ -20,6 +20,41 @@ body{
     align-items:center;
     height:100vh;
 }
+.login-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.google-btn {
+    display: inline-block;
+    text-decoration: none;
+    background: #4285F4;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: .3s;
+}
+
+.google-btn:hover {
+    background: #2d6cdf;
+}
+
+.github-btn {
+    display: inline-block;
+    text-decoration: none;
+    background: #24292e;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: .3s;
+}
+
+.github-btn:hover {
+    background: #000;
+}
 
 .container{
     background:white;
@@ -65,11 +100,21 @@ a:hover{
 
     <h1>Google OAuth Demo</h1>
 
-    <p>Sign in using your Google account</p>
+    <p>Sign in using your Google Account / GitHub Account</p>
 
-    <a href="/oauth2/authorization/google">
-        Login with Google
-    </a>
+	<div class="login-buttons">
+
+	    <a class="google-btn" href="/oauth2/authorization/google">
+	        Login with Google
+	    </a>
+
+	    <a class="github-btn" href="/oauth2/authorization/github">
+	        Login with GitHub
+	    </a>
+		
+		
+
+	</div>
 
 </div>
 
