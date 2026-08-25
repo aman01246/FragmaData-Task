@@ -34,6 +34,9 @@
 			text-align: left;
 			font-size: 16px;
 		}
+		.linked-acc{
+			text-align: left;
+		}
 
 		button {
 			background: #4285F4;
@@ -65,7 +68,7 @@
 
 		<p><b>Providers :</b></p>
 
-		<ul>
+		<ul class="linked-acc">
 		    <li th:each="provider : ${user.providers}">
 		        <span th:text="${provider.provider}"></span>
 		        -

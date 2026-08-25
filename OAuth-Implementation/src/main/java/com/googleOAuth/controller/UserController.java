@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.googleOAuth.entity.User;
+import com.googleOAuth.exception.OAuthException;
 import com.googleOAuth.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -33,25 +34,27 @@ public class UserController {
 		String provider = authentication.getAuthorizedClientRegistrationId();
 		
 		System.out.println("Provider = " + provider);
-		System.out.println("OAuth2User = " + oAuth2User);
-		System.out.println("Attributes = " + oAuth2User.getAttributes());
+		
+//		System.out.println("OAuth2User = " + oAuth2User);
+//		System.out.println("Attributes = " + oAuth2User.getAttributes());
 		
 		//Get Common Information 
 		String email = oAuth2User.getAttribute("email");
 		
 		 if (email == null) {
-		        throw new RuntimeException(
+		        throw new OAuthException(
 		                "Email was not provided by " + provider);
 		 }
 		
 		  // Get provider-specific ID
 	        String providerId;
+	        
 	        String name;
 	        String picture;
 	        
 	        if (provider.equals("google")) {
 	        	
-	        	 providerId = oAuth2User.getAttribute("sub");
+	         	 providerId = oAuth2User.getAttribute("sub");
 	             name = oAuth2User.getAttribute("name");
 	             picture = oAuth2User.getAttribute("picture");
 	        }
@@ -71,7 +74,7 @@ public class UserController {
 	       
 	        else {
 
-	            throw new RuntimeException(
+	            throw new OAuthException(
 	                    "Unsupported provider: " + provider);
 	        }
 		 
@@ -114,6 +117,7 @@ public class UserController {
 		 String providerId;
 	        String picture;
 		 
+	    // if user account is google
 		if (provider.equals("google")) {
 			 providerId =
 	                    oauthUser.getAttribute("sub");
@@ -121,6 +125,7 @@ public class UserController {
 	            picture =
 	                    oauthUser.getAttribute("picture");
 		}
+		// if user account is github
 		else if(provider.equals("github")) {
 	           providerId =
 	                    String.valueOf(

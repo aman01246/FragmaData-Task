@@ -13,7 +13,7 @@ public class SecurityConfig {
 		
 		http
 			.authorizeHttpRequests(auth -> auth
-					 .requestMatchers("/").permitAll()
+					 .requestMatchers("/ , /favicon.ico").permitAll()
 					.anyRequest().authenticated())
 			
 //			.exceptionHandling(exception -> exception

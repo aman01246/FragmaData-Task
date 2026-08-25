@@ -19,6 +19,7 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final UserProviderRepository userProviderRepository;
 
+	
 	public Optional<User> findByEmail(String email) {
 		return userRepository.findByEmail(email);
 	}
@@ -30,7 +31,7 @@ public class UserService {
 	@Transactional
 	public Optional<User> processOAuthUser(String provider, String providerId, String email) {
 
-		// 1. Check this OAuth account is already linked
+		// Check this OAuth account is already linked
 		Optional<UserProvider> existingProvider = userProviderRepository.findByProviderAndProviderId(provider,
 				providerId);
 
@@ -38,7 +39,7 @@ public class UserService {
 			return Optional.of(existingProvider.get().getUser());
 		}
 
-		// 2. OAuth account is new.
+		//  OAuth account is new.
 		// Check whether a User with this email already exists.
 		Optional<User> existingUser = userRepository.findByEmail(email);
 
