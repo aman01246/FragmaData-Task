@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>User Profile</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .container {
+            width: 450px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        .profile-image {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .profile-image img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid #4285F4;
+            object-fit: cover;
+        }
+
+        .info {
+            text-align: left;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 5px;
+            border-bottom: 1px solid #eee;
+            gap: 20px;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #555;
+            min-width: 120px;
+        }
+
+        .value {
+            color: #222;
+            text-align: right;
+            word-break: break-word;
+        }
+
+        .provider-section {
+            margin-top: 20px;
+        }
+
+        .provider-title {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .provider-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .provider-list li {
+            background: #f7f7f7;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            text-align: left;
+        }
+
+        .provider-name {
+            font-weight: bold;
+            color: #4285F4;
+            text-transform: capitalize;
+        }
+
+        .logout-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .logout-button {
+            background: #4285F4;
+            color: white;
+            border: none;
+            padding: 11px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .logout-button:hover {
+            background: #2d6cdf;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <h2>User Profile</h2>
+
+
+    <!-- Profile Picture -->
+
+    <div class="profile-image">
+
+        <img
+            th:src="${user.profilePicture}"
+            alt="Profile Picture"
+        >
+
+    </div>
+
+
+    <!-- User Information -->
+
+    <div class="info">
+
+
+        <!-- User ID -->
+
+        <div class="info-row">
+
+            <span class="label">
+                User ID
+            </span>
+
+            <span
+                class="value"
+                th:text="${user.id}">
+                1
+            </span>
+
+        </div>
+
+
+        <!-- Name -->
+
+        <div class="info-row">
+
+            <span class="label">
+                Name
+            </span>
+
+            <span
+                class="value"
+                th:text="${user.name}">
+                Aman
+            </span>
+
+        </div>
+
+
+        <!-- Email -->
+
+        <div class="info-row">
+
+            <span class="label">
+                Email
+            </span>
+
+            <span
+                class="value"
+                th:text="${user.email}">
+                aman@gmail.com
+            </span>
+
+        </div>
+
+
+        <!-- Phone -->
+
+        <div class="info-row">
+
+            <span class="label">
+                Phone
+            </span>
+
+            <span
+                class="value"
+                th:text="${user.phone}">
+                9876543210
+            </span>
+
+        </div>
+
+
+        <!-- Department -->
+
+        <div class="info-row">
+
+            <span class="label">
+                Department
+            </span>
+
+            <span
+                class="value"
+                th:text="${user.department}">
+                IT
+            </span>
+
+        </div>
+
+
+        <!-- Designation -->
+
+        <div class="info-row">
+
+            <span class="label">
+                Designation
+            </span>
+
+            <span
+                class="value"
+                th:text="${user.designation}">
+                Java Developer
+            </span>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- Linked OAuth Providers -->
+
+    <div class="provider-section">
+
+        <div class="provider-title">
+            Linked Accounts
+        </div>
+
+
+        <ul class="provider-list">
+
+            <li th:each="provider : ${user.providers}">
+
+                <span
+                    class="provider-name"
+                    th:text="${provider.provider}">
+                    google
+                </span>
+
+                <br>
+
+                <small>
+                    Provider ID:
+                </small>
+
+                <span
+                    th:text="${provider.providerId}">
+                    123456789
+                </span>
+
+            </li>
+
+        </ul>
+
+    </div>
+
+
+    <!-- Logout -->
+
+    <div class="logout-container">
+
+        <form
+            th:action="@{/logout}"
+            method="post">
+
+            <button
+                type="submit"
+                class="logout-button">
+
+                Logout
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
