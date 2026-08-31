@@ -1,0 +1,364 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+}
+
+
+.page-container {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+.login-card,
+.form-card,
+.profile-card {
+
+    width: 100%;
+    max-width: 420px;
+
+    background: white;
+
+    padding: 40px;
+
+    border-radius: 15px;
+
+    box-shadow:
+            0 10px 30px rgba(0, 0, 0, 0.12);
+
+    text-align: center;
+}
+
+
+.lock-icon {
+
+    font-size: 50px;
+
+    margin-bottom: 15px;
+}
+
+
+h1 {
+
+    margin-bottom: 10px;
+
+    color: #222;
+}
+
+
+.subtitle {
+
+    color: #777;
+
+    margin-bottom: 30px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================
+   OAUTH BUTTONS
+========================= */
+
+.oauth-button {
+
+    width: 100%;
+
+    height: 55px;
+
+    margin-bottom: 15px;
+
+    border-radius: 8px;
+
+    border: none;
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    transition: 0.2s;
+
+}
+
+
+.oauth-button:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+            0 6px 15px rgba(0, 0, 0, 0.15);
+
+}
+
+
+.google {
+
+    background: white;
+
+    color: #333;
+
+    border: 1px solid #ddd;
+}
+
+
+.aws {
+
+    background: #232f3e;
+
+    color: white;
+}
+
+
+.azure {
+
+    background: #0078d4;
+
+    color: white;
+}
+
+
+.provider-icon {
+
+    margin-right: 10px;
+}
+
+
+/* =========================
+   REGISTER FORM
+========================= */
+
+.form-card {
+
+    text-align: left;
+}
+
+
+.form-card h1,
+.form-card .subtitle {
+
+    text-align: center;
+}
+
+
+.form-group {
+
+    margin-bottom: 20px;
+
+}
+
+
+label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-weight: bold;
+
+    color: #444;
+
+}
+
+
+input {
+
+    width: 100%;
+
+    height: 48px;
+
+    padding: 12px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 7px;
+
+    font-size: 15px;
+
+}
+
+
+input:focus {
+
+    outline: none;
+
+    border-color: #0078d4;
+
+}
+
+
+.submit-button {
+
+    width: 100%;
+
+    height: 50px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #0078d4;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+.submit-button:hover {
+
+    background: #0063b1;
+}
+
+
+/* =========================
+   PROFILE
+========================= */
+
+.profile-image img {
+
+    width: 120px;
+
+    height: 120px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    margin-bottom: 15px;
+
+}
+
+
+.profile-card {
+
+    text-align: center;
+}
+
+
+.profile-card > p {
+
+    color: #777;
+
+    margin-bottom: 25px;
+}
+
+
+.profile-details {
+
+    text-align: left;
+
+    border-top: 1px solid #eee;
+
+}
+
+
+.profile-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 16px 0;
+
+    border-bottom: 1px solid #eee;
+
+}
+
+
+.label {
+
+    font-weight: bold;
+
+    color: #444;
+}
+
+
+.logout-button {
+
+    width: 100%;
+
+    margin-top: 25px;
+
+    height: 48px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #dc3545;
+
+    color: white;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+}
+
+.identities-section {
+    align-items: flex-start;
+}
+
+#identitiesContainer {
+    width: 100%;
+}
+
+.provider-item {
+    margin-top: 10px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f7f7f7;
+}
+
+.provider-item div {
+    margin: 5px 0;
+}
+
+.logout-button:hover {
+
+    background: #bb2d3b;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 500px) {
+
+    .login-card,
+    .form-card,
+    .profile-card {
+
+        padding: 30px 20px;
+
+    }
+
+}

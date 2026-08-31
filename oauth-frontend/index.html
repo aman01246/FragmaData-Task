@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>OAuth Login</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="page-container">
+
+    <div class="login-card">
+
+        <div class="lock-icon">🔐</div>
+
+        <h1>Welcome</h1>
+
+        <p class="subtitle">
+            Choose a provider to continue
+        </p>
+
+        <button class="oauth-button google"
+                onclick="loginWithGoogle()">
+
+            <span class="provider-icon">G</span>
+
+            Continue with Google
+
+        </button>
+
+
+        <button class="oauth-button aws"
+                onclick="loginWithAws()">
+
+            <span class="provider-icon">AWS</span>
+
+            Continue with AWS
+
+        </button>
+
+
+        <button class="oauth-button azure"
+                onclick="loginWithAzure()">
+
+            <span class="provider-icon">☁</span>
+
+            Continue with Azure
+
+        </button>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>

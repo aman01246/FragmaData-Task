@@ -3,3 +3,4 @@ OAuth-Implementation/src/main/resources/secret.yml
 OAuth Documentation.txt
 target/
 Manual-OAuth/src/main/resources/secret.yml
+OAuth-project/src/main/resources/secret.yml

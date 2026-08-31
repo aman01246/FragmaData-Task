@@ -1,0 +1,35 @@
+                    ┌──────────────────────┐
+                    │      FRONTEND        │
+                    │ React / Angular etc. │
+                    └──────────┬───────────┘
+                               │
+              ┌────────────────┴────────────────┐
+              │                                 │
+        GET /api/auth/google              GET /api/auth/aws
+        GET /api/auth/azure
+              │                                 │
+              ▼                                 ▼
+       ┌──────────────────────────────────────────┐
+       │             SPRING BOOT API              │
+       │                                          │
+       │  OAuth2 Login / OIDC                     │
+       │  Authentication                          │
+       │  User management                         │
+       │  JWT generation                          │
+       │  Refresh token                           │
+       │  Logout                                  │
+       └───────────────┬──────────────────────────┘
+                       │
+             ┌─────────┼─────────┐
+             ▼         ▼         ▼
+          Google      AWS      Azure
+          OAuth       OIDC      Entra ID
+             │         │         │
+             └─────────┼─────────┘
+                       ▼
+                  ┌─────────┐
+                  │  MySQL  │
+                  │ Users   │
+                  └─────────┘
+
+

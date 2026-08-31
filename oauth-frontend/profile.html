@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <div class="page-container">
+
+        <div class="profile-card">
+
+            <div class="profile-image">
+
+                <img id="profilePicture" src="https://via.placeholder.com/120" alt="Profile Picture">
+
+            </div>
+
+
+            <h1 id="userName">
+                User Name
+            </h1>
+
+
+            <p id="userEmail">
+                user@email.com
+            </p>
+
+
+            <div class="profile-details">
+
+                <div class="profile-row">
+
+                    <span class="label">
+                        📞 Phone
+                    </span>
+
+                    <span id="phoneValue">
+                        -
+                    </span>
+
+                </div>
+
+
+                <div class="profile-row">
+
+                    <span class="label">
+                        🏢 Department
+                    </span>
+
+                    <span id="departmentValue">
+                        -
+                    </span>
+
+                </div>
+
+
+                <div class="profile-row">
+
+                    <span class="label">
+                        💼 Designation
+                    </span>
+
+                    <span id="designationValue">
+                        -
+                    </span>
+
+                </div>
+
+                <div class="profile-row identities-section">
+
+    <span class="label">
+        🔐 Connected Providers
+    </span>
+
+    <div id="identitiesContainer">
+
+        Loading...
+
+    </div>
+
+</div>
+
+
+            <button class="logout-button" onclick="logout()">
+
+                Logout
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
