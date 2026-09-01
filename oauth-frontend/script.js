@@ -1,15 +1,75 @@
 const BACKEND_URL = "http://localhost:8080";
 
-function loginWithGoogle() {
-  window.location.href = BACKEND_URL + "/oauth2/authorization/google";
+
+/* =========================
+   SHOW PROVIDERS
+========================= */
+
+async function showProviders() {
+
+  const oauthButton =
+    document.getElementById("oauthButton");
+
+  // Hide Continue with OAuth button
+  if (oauthButton) {
+    oauthButton.style.display = "none";
+  }
+
+  await loadProviders();
 }
 
-function loginWithAws() {
-  window.location.href = BACKEND_URL + "/oauth2/authorization/aws";
+
+/* =========================
+   LOAD OAUTH PROVIDERS
+========================= */
+
+async function loadProviders() {
+  try {
+    const response = await fetch(BACKEND_URL + "/api/auth/providers");
+
+     console.log("Response status:", response.status);
+
+
+    if (!response.ok) {
+      throw new Error("Unable to load OAuth providers");
+    }
+
+    const providers = await response.json();
+
+    console.log("Providers:", providers);
+
+    const container = document.getElementById("providerContainer");
+
+       // Clear container first
+    container.innerHTML = "";
+
+
+    providers.forEach((provider) => {
+      const button = document.createElement("button");
+
+      button.className = `oauth-button ${provider.id.toLowerCase()}-button`;
+
+      button.textContent = provider.name;
+
+      button.addEventListener("click", function () {
+        login(provider.id);
+      });
+
+      container.appendChild(button);
+    });
+  } catch (error) {
+    console.error(error);
+
+    alert("Unable to load login providers");
+  }
 }
 
-function loginWithAzure() {
-  window.location.href = BACKEND_URL + "/oauth2/authorization/azure";
+/* =========================
+   LOGIN
+========================= */
+
+function login(providerName) {
+  window.location.href = BACKEND_URL + "/api/auth/login/" + providerName;
 }
 
 /* =========================
@@ -103,26 +163,21 @@ async function loadProfile() {
 
     document.getElementById("designationValue").textContent = user.designation;
 
-      // ==============================
-        // SHOW ALL CONNECTED PROVIDERS
-        // ==============================
+    // ==============================
+    // SHOW ALL CONNECTED PROVIDERS
+    // ==============================
 
-        const identitiesContainer =
-            document.getElementById("identitiesContainer");
+    const identitiesContainer = document.getElementById("identitiesContainer");
 
-        identitiesContainer.innerHTML = "";
+    identitiesContainer.innerHTML = "";
 
+    if (user.identities && user.identities.length > 0) {
+      user.identities.forEach((identity) => {
+        const providerDiv = document.createElement("div");
 
-        if (user.identities && user.identities.length > 0) {
+        providerDiv.className = "provider-item";
 
-            user.identities.forEach(identity => {
-
-                const providerDiv =
-                    document.createElement("div");
-
-                providerDiv.className = "provider-item";
-
-                providerDiv.innerHTML = `
+        providerDiv.innerHTML = `
                     <div>
                         <strong>Provider:</strong>
                         ${identity.provider}
@@ -134,17 +189,11 @@ async function loadProfile() {
                     </div>
                 `;
 
-                identitiesContainer.appendChild(providerDiv);
-
-            });
-   } else {
-
-            identitiesContainer.innerHTML =
-                "<span>No provider connected</span>";
-
-        }
-
-    
+        identitiesContainer.appendChild(providerDiv);
+      });
+    } else {
+      identitiesContainer.innerHTML = "<span>No provider connected</span>";
+    }
   } catch (error) {
     console.error(error);
 

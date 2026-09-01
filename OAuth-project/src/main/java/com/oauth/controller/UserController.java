@@ -41,20 +41,18 @@ public class UserController {
 
 		String email = oauthUser.getAttribute("email");
 
-		User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+		User user = userRepository.findByEmail(email)
+				.orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-		user.setPhone(request.getPhone());
+		user.setPhone(request.getPhone()); 
 		user.setDepartment(request.getDepartment());
 		user.setDesignation(request.getDesignation());
 
 		User updatedUser = userRepository.save(user);
 
 		return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
-
 				HttpStatus.OK.value(),
-
 				"Profile completed successfully",
-
 				updatedUser));
 	}
 

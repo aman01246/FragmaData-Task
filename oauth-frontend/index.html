@@ -12,52 +12,44 @@
 
 <body>
 
-<div class="page-container">
+    <div class="page-container">
 
-    <div class="login-card">
+        <div class="login-card">
 
-        <div class="lock-icon">🔐</div>
+            <div class="lock-icon">🔐</div>
 
-        <h1>Welcome</h1>
+            <h1>Welcome</h1>
 
-        <p class="subtitle">
-            Choose a provider to continue
-        </p>
+            <p class="subtitle">
+                Choose a provider to continue
+            </p>
 
-        <button class="oauth-button google"
-                onclick="loginWithGoogle()">
+            <!-- Initial OAuth button -->
 
-            <span class="provider-icon">G</span>
+            <div id="providerContainer">
 
-            Continue with Google
+                <button id="oauthButton" 
+                class="oauth-button" 
+                onclick="showProviders()">
 
-        </button>
+                    Continue with OAuth
 
+                </button>
 
-        <button class="oauth-button aws"
-                onclick="loginWithAws()">
-
-            <span class="provider-icon">AWS</span>
-
-            Continue with AWS
-
-        </button>
+            </div>
 
 
-        <button class="oauth-button azure"
-                onclick="loginWithAzure()">
+            <!-- Buttons will come from database -->
 
-            <span class="provider-icon">☁</span>
+            <div id="providerContainer">
 
-            Continue with Azure
+            </div>
 
-        </button>
+        </div>
 
     </div>
 
-</div>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 
 </body>
 

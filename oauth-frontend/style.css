@@ -362,3 +362,73 @@ input:focus {
     }
 
 }
+
+.oauth-button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 15px;
+
+    border: none;
+    border-radius: 10px;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    color: white;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+/* =====================
+   CONTINUE WITH OAUTH
+===================== */
+
+#oauthButton {
+    background: #333;
+}
+
+#oauthButton:hover {
+    background: #555;
+}
+
+
+/* =====================
+   GOOGLE
+===================== */
+
+.google-button {
+    background: #e44a4a;
+}
+
+.google-button:hover {
+    background: #e4e020;
+}
+
+
+/* =====================
+   AWS
+===================== */
+
+.aws-button {
+    background: #FF9900;
+    color: #111;
+}
+
+.aws-button:hover {
+    background: #E88B00;
+}
+
+
+/* =====================
+   AZURE
+===================== */
+
+.azure-button {
+    background: #0078D4;
+}
+
+.azure-button:hover {
+    background: #005A9E;
+}

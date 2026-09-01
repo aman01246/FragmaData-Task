@@ -49,7 +49,7 @@ public class AuthService {
             name = email;
         }
 		// ==================================
-		// 1. CHECK PROVIDER IDENTITY
+		//  CHECK PROVIDER IDENTITY
 		// ==================================
 
 		UserIdentity identity = userIdentityRepository
@@ -71,7 +71,7 @@ public class AuthService {
 		User user = userRepository.findByEmail(email).orElse(null);
 
 		// ==================================
-		// 3. CREATE NEW USER IF NEEDED
+		//  CREATE NEW USER IF NEEDED
 		// ==================================
 
 		if (user == null) {
@@ -91,7 +91,7 @@ public class AuthService {
 		}
 
 		// ==================================
-		// 4. CREATE PROVIDER IDENTITY
+		//  CREATE PROVIDER IDENTITY
 		// ==================================
 
 		UserIdentity newIdentity = 

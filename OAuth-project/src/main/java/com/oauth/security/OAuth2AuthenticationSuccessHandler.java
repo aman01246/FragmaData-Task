@@ -17,33 +17,47 @@ import com.oauth.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
 	private final AuthService authService;
 
-	// Spring automatically injects all OAuthUserInfoMapper components
+	// Map:
+	// google -> GoogleOAuthUserInfoMapper
+	// aws -> AwsOAuthUserInfoMapper
+	// azure -> AzureOAuthUserInfoMapper
 	private final Map<String, OAuthUserInfoMapper> mappers;
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException {
 
+		log.info("OAuth authentication successful");
+
+		// GET OAUTH USER
 		OAuth2User oauthUser = (OAuth2User) authentication.getPrincipal();
 
+		log.debug("OAuth user principal received");
 		OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
 
+		// google / aws / azure
 		String registrationId = token.getAuthorizedClientRegistrationId();
+
+		log.info("OAuth login successful for provider: {}", registrationId);
 
 		// GET CORRECT MAPPER
 		OAuthUserInfoMapper mapper = mappers.get(registrationId);
 
 		if (mapper == null) {
-
+			log.error("No OAuth mapper found for provider: {}", registrationId);
 			throw new IllegalArgumentException("Unsupported provider: " + registrationId);
 		}
+
+		log.debug("OAuth mapper found for provider: {}", registrationId);
 
 		// CONVERT PROVIDER DATA
 		OAuthUserInfo userInfo = mapper.map(oauthUser);
@@ -51,20 +65,16 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
 		// GET PROVIDER
 		String provider = String.valueOf(registrationId.toUpperCase());
 
-		// SAVE / UPDATE USER
+		// Find/Create/Update user
 		User user = authService.processOAuthUser(userInfo, provider);
-
-		// CONSOLE LOG
-		System.out.println("========== OAUTH LOGIN ==========");
-		System.out.println("Provider: " + registrationId);
-		System.out.println("User Email: " + user.getEmail());
-		System.out.println("Profile Completed: " + user.isProfileCompleted());
-		System.out.println("=================================");
 
 		// REDIRECT FRONTEND
 		if (user.isProfileCompleted()) {
+			log.info("Profile is completed for user ID: {}. Redirecting to profile page", user.getId());
+
 			response.sendRedirect("http://localhost:5501/profile.html");
 		} else {
+			log.info("Profile is incomplete for user ID: {}. Redirecting to registration page", user.getId());
 			response.sendRedirect("http://localhost:5501/register.html");
 		}
 	}
