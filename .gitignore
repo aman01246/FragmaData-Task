@@ -5,3 +5,4 @@ target/
 Manual-OAuth/src/main/resources/secret.yml
 OAuth-project/src/main/resources/secret.yml
 secretKey.txt
+OauthSQL_Table_Query.txt
